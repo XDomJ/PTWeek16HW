@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    username: root 
+    password: PonyX7!Icem4n
+    url: jdbc:mysql://localhost:3306/jeep
