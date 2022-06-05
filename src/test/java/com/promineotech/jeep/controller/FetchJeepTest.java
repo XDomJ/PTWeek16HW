@@ -22,8 +22,8 @@ import com.promineotech.jeep.entity.JeepModel;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @Sql(scripts = {
-    "classpath:flyway/migration/V1.0_Jepp_Schema.sql",
-    "classpath:flyway/migrations/V1.1_Jeep_Data.sql"},
+    "classpath:flyway/migrations/V1.0__Jeep_Schema.sql",
+    "classpath:flyway/migrations/V1.1__Jeep_Data.sql"},
     config = @SqlConfig(encoding = "utf-8"))
 class FetchJeepTest {
 
@@ -41,13 +41,14 @@ class FetchJeepTest {
        "http://localhost:%d/jeeps?model=%s&trim=%s",
        serverPort, model, trim);
    
-   ResponseEntity<Jeep> response = restTemplate.exchange(
+   ResponseEntity<List<Jeep>> response = restTemplate.exchange(
        uri, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
    
    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
    
+   List<Jeep> actual = response.getBody();
    List<Jeep> expected = buildExpected();
-   assertThat(response.getBody()).isEqualTo(expected);
+   assertThat(actual).isEqualTo(expected);
   }
   
   List<Jeep> buildExpected() {
